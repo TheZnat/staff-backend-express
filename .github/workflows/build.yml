@@ -7,15 +7,15 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Chekout
+        uses: actions/checkout@v3
       - name: Create env file
         run: |
           touch .env
-          print PORT=${{ secrets.PORT }} >> .env
-          print JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
-          print DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo PORT=${{ secrets.PORT }} >> .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
           cat .env
-      - name: Chekout
-        uses: actions/checkout@v3
       - name: install deps
         run: npm ci
       - name: Prisma generate
