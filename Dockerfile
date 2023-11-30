@@ -10,7 +10,7 @@ WORKDIR ${APP_DIR}
 COPY package*.json ./
 RUN npm install
 
-RUN mv .env.example .env
+COPY .env /app/.env
 RUN npx prisma generate
 RUN npx prisma migrate dev
 RUN npm run server
