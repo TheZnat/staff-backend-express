@@ -1,27 +1,43 @@
 FROM node:20
 
-# Папка приложения
-ARG APP_DIR=app
-RUN mkdir -p ${APP_DIR}
-WORKDIR ${APP_DIR}
+# Указываем нашу рабочую дерикторию
+WORKDIR /app
 
-
-# Установка зависимостей
+# Копируем package.json и package-lock.json внутрь контейнера
 COPY package*.json ./
+
+# Устанавливаем зависимости
 RUN npm install
 
-COPY .env /app/.env
-RUN npx prisma generate
-RUN npx prisma migrate dev
-RUN npm run server
-# Для использования в продакшне
-# RUN npm install --production
-
-# Копирование файлов проекта
+# Копируем оставшееся приложение в контейнер
 COPY . .
 
-# Уведомление о порте, который будет прослушивать работающее приложение
+# Устанавливаем Prisma
+RUN npm install prisma
+
+# Генерируем Prisma client
+RUN npx prisma generate
+
+# Создаем базу данных и делаем миграцию
+RUN npx prisma migrate dev
+
+# Копируем Prisma schema и URL базы данных в контейнер
+COPY prisma/schema.prisma ./prisma/
+
+# Переходим в директорию /app/client
+WORKDIR /app/client
+
+# Собираем клиентскую часть приложения
+RUN npm run build
+
+# Возвращаемся в корневую директорию /app
+WORKDIR /app
+
+# Устанавливаем значение переменной окружения
+ENV NODE_ENV=production
+
+# Открываем порт 8000 в нашем контейнере
 EXPOSE 8000
 
-# Запуск проекта
-CMD ["npm", "run","start"]
+# Запускаем сервер
+CMD [ "npm", "start" ]
