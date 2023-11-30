@@ -9,9 +9,7 @@ WORKDIR ${APP_DIR}
 # Установка зависимостей
 COPY package*.json ./
 
-ENV PORT = ${{ vars.PORT }}
-ENV JWT_SECRET = ${{ JWT_SECRET }}
-ENV JWT_SECRET = ${{ DATABASE_UR}}
+
 RUN npm install
 RUN npx prisma generate
 RUN npx prisma migrate dev
