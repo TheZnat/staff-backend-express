@@ -23,4 +23,4 @@ jobs:
       - name: Prisma migrate
         run: npx prisma migrate dev
       - name: Starting
-        run: npm run server
+        run: npm run start
