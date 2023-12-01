@@ -4,7 +4,7 @@ on:
     branches:
       - "main"
 jobs:
-  docker:
+  BuildDocker:
     runs-on: ubuntu-latest
     steps:
       - name: Chekout
@@ -16,11 +16,13 @@ jobs:
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
           cat .env
-      - name: install deps
-        run: npm ci
-      - name: Prisma generate
-        run: npx prisma generate
-      - name: Prisma migrate
-        run: npx prisma migrate dev
-      - name: Starting
-        run: npm run start
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile
+          push: false
+          tags: user/app:latest
