@@ -19,11 +19,11 @@ RUN npm install prisma
 # Генерируем Prisma client
 RUN npx prisma generate
 
-# Создаем базу данных и делаем миграцию
-RUN npx prisma migrate dev
+# # Создаем базу данных и делаем миграцию
+# RUN npx prisma migrate dev
 
-# Копируем Prisma schema и URL базы данных в контейнер
-COPY prisma/schema.prisma ./prisma/
+# # Копируем Prisma schema и URL базы данных в контейнер
+# COPY prisma/schema.prisma ./prisma/
 
 # Уведомление о порте, который будет прослушивать работающее приложение
 EXPOSE 8000
