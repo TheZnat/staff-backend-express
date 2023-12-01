@@ -12,7 +12,7 @@ COPY package*.json ./
 
 RUN npm install
 RUN npx prisma generate
-RUN npm run server
+
 
 # Копирование файлов проекта
 COPY . .
